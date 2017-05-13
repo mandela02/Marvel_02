@@ -16,16 +16,14 @@
             android:layout_width="@dimen/dp_110"
             android:layout_height="@dimen/dp_100"
             android:layout_margin="@dimen/dp_5"
-            android:scaleType="centerCrop"
-            />
+            android:scaleType="centerCrop"/>
 
         <TextView
             android:id="@+id/text_name"
             android:layout_width="@dimen/dp_70"
             android:layout_height="@dimen/dp_70"
             android:layout_below="@id/image_avatar"
-            android:layout_margin="@dimen/dp_5"
-            />
+            android:layout_margin="@dimen/dp_5"/>
 
         <ImageView
             android:id="@+id/image_like"
@@ -35,8 +33,8 @@
             android:layout_margin="@dimen/dp_5"
             android:layout_toRightOf="@id/text_name"
             android:scaleType="centerCrop"
-            android:src="@drawable/ic_like_white"
-            />
+            android:src="@drawable/ic_like_white"/>
 
     </RelativeLayout>
+
 </android.support.v7.widget.CardView>
