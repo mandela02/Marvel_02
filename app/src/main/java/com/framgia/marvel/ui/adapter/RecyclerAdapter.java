@@ -11,15 +11,14 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.framgia.marvel.R;
 import com.framgia.marvel.data.model.Result;
+import com.framgia.marvel.data.value.Const;
 
 import java.util.List;
 
 /**
  * Created by asus on 5/12/2017.
  */
-
 public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHolder> {
-
     private List<Result> mResults;
     private Context mContext;
     private boolean mIsGrid;
@@ -33,7 +32,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
     @Override
     public RecyclerAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext())
-                .inflate(mIsGrid ? R.layout.grid_item : R.layout.recycler_item, parent, false);
+            .inflate(mIsGrid ? R.layout.grid_item : R.layout.recycler_item, parent, false);
         return new ViewHolder(v);
     }
 
@@ -54,14 +53,14 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
 
         public ViewHolder(View itemView) {
             super(itemView);
-
             mImageAvatar = (ImageView) itemView.findViewById(R.id.image_avatar);
             mTextName = (TextView) itemView.findViewById(R.id.text_name);
         }
 
         public void bindData(Result item) {
             if (item == null) return;
-            String avatarUrl = item.getThumnail().getPath() + R.string.size_medium + item.getThumnail().getExtension();
+            String avatarUrl = item.getThumnail().getPath() + Const.SIZE_MEDIUM +
+                item.getThumnail().getExtension();
             mTextName.setText(item.getName());
             Glide.with(mContext).load(avatarUrl).into(mImageAvatar);
         }

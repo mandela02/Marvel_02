@@ -1,11 +1,13 @@
 package com.framgia.marvel.data.model;
 
+import android.database.Cursor;
+
+import com.framgia.marvel.data.database.MarvelDatabase;
 import com.google.gson.annotations.SerializedName;
 
 /**
  * Created by asus on 5/12/2017.
  */
-
 public class Result {
     @SerializedName("id")
     private int mId;
@@ -13,8 +15,21 @@ public class Result {
     private String mName;
     @SerializedName("description")
     private String mDescription;
-    @SerializedName("thumnail")
-    private Thumnail mThumnail;
+    @SerializedName("thumbnail")
+    private Thumbnail mThumbnail;
+    private int mDbId;
+    private String mAvatar;
+
+    public Result(Cursor cursor) {
+        this.mId = cursor.getInt(cursor.getColumnIndex(MarvelDatabase.MarvelEntry.COLUMN_ID));
+        this.mName =
+            cursor.getString(cursor.getColumnIndex(MarvelDatabase.MarvelEntry.COLUMN_NAME));
+        this.mDescription = cursor.getString(cursor.getColumnIndex(MarvelDatabase.MarvelEntry
+            .COLUMN_DES));
+        this.mAvatar = cursor.getString(cursor.getColumnIndex(MarvelDatabase.MarvelEntry
+            .COLUMN_URL));
+        this.mDbId = cursor.getInt(cursor.getColumnIndex(MarvelDatabase.MarvelEntry._ID));
+    }
 
     public int getId() {
         return mId;
@@ -40,11 +55,27 @@ public class Result {
         mDescription = description;
     }
 
-    public Thumnail getThumnail() {
-        return mThumnail;
+    public Thumbnail getThumnail() {
+        return mThumbnail;
     }
 
-    public void setThumnail(Thumnail thumnail) {
-        mThumnail = thumnail;
+    public void setThumnail(Thumbnail thumnail) {
+        mThumbnail = thumnail;
+    }
+
+    public int getDbId() {
+        return mDbId;
+    }
+
+    public void setDbId(int dbId) {
+        mDbId = dbId;
+    }
+
+    public String getAvatar() {
+        return mAvatar;
+    }
+
+    public void setAvatar(String avatar) {
+        mAvatar = avatar;
     }
 }

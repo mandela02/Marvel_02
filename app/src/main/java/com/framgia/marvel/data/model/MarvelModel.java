@@ -5,7 +5,6 @@ import com.google.gson.annotations.SerializedName;
 /**
  * Created by asus on 5/12/2017.
  */
-
 public class MarvelModel {
     @SerializedName("copyright")
     private String mCopyright;
