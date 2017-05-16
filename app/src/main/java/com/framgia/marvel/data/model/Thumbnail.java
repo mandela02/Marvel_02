@@ -5,8 +5,7 @@ import com.google.gson.annotations.SerializedName;
 /**
  * Created by asus on 5/12/2017.
  */
-
-public class Thumnail {
+public class Thumbnail {
     @SerializedName("path")
     private String mPath;
     @SerializedName("extension")

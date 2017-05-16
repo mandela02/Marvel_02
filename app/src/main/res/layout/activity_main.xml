@@ -18,6 +18,7 @@
         android:backgroundTint="@color/colorPrimary"
         android:src="@drawable/ic_options"
         app:elevation="@dimen/dp_6"
+        app:borderWidth="@dimen/dp_0"
         app:pressedTranslationZ="@dimen/dp_12"/>
 
     <android.support.v7.widget.RecyclerView

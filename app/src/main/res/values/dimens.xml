@@ -13,4 +13,5 @@
     <dimen name="dp_25">25dp</dimen>
     <dimen name="dp_5">5dp</dimen>
     <dimen name="dp_80">80dp</dimen>
+    <dimen name="dp_0">0dp</dimen>
 </resources>
