@@ -1,14 +1,18 @@
 package com.framgia.marvel.data.model;
 
 import android.database.Cursor;
+import android.os.Parcel;
+import android.os.Parcelable;
 
 import com.framgia.marvel.data.database.MarvelDatabase;
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
+
 /**
  * Created by asus on 5/12/2017.
  */
-public class Result {
+public class Result implements Parcelable {
     @SerializedName("id")
     private int mId;
     @SerializedName("name")
@@ -19,6 +23,25 @@ public class Result {
     private Thumbnail mThumbnail;
     private int mDbId;
     private String mAvatar;
+    public static final Creator<Result> CREATOR = new Creator<Result>() {
+        @Override
+        public Result createFromParcel(Parcel in) {
+            return new Result(in);
+        }
+
+        @Override
+        public Result[] newArray(int size) {
+            return new Result[size];
+        }
+    };
+
+    protected Result(Parcel in) {
+        mId = in.readInt();
+        mName = in.readString();
+        mDescription = in.readString();
+        mDbId = in.readInt();
+        mAvatar = in.readString();
+    }
 
     public Result(Cursor cursor) {
         this.mId = cursor.getInt(cursor.getColumnIndex(MarvelDatabase.MarvelEntry.COLUMN_ID));
@@ -55,12 +78,12 @@ public class Result {
         mDescription = description;
     }
 
-    public Thumbnail getThumnail() {
+    public Thumbnail getThumbnail() {
         return mThumbnail;
     }
 
-    public void setThumnail(Thumbnail thumnail) {
-        mThumbnail = thumnail;
+    public void setThumbnail(Thumbnail thumbnail) {
+        mThumbnail = thumbnail;
     }
 
     public int getDbId() {
@@ -77,5 +100,19 @@ public class Result {
 
     public void setAvatar(String avatar) {
         mAvatar = avatar;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(mId);
+        dest.writeString(mName);
+        dest.writeString(mDescription);
+        dest.writeInt(mDbId);
+        dest.writeString(mAvatar);
     }
 }

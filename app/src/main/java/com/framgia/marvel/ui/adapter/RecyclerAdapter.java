@@ -1,6 +1,7 @@
 package com.framgia.marvel.ui.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +13,7 @@ import com.bumptech.glide.Glide;
 import com.framgia.marvel.R;
 import com.framgia.marvel.data.model.Result;
 import com.framgia.marvel.data.value.Const;
+import com.framgia.marvel.ui.activity.InformationActivity;
 
 import java.util.List;
 
@@ -47,7 +49,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
         return mResults.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private ImageView mImageAvatar;
         private TextView mTextName;
 
@@ -55,14 +57,21 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
             super(itemView);
             mImageAvatar = (ImageView) itemView.findViewById(R.id.image_avatar);
             mTextName = (TextView) itemView.findViewById(R.id.text_name);
+            itemView.setOnClickListener(this);
         }
 
         public void bindData(Result item) {
             if (item == null) return;
-            String avatarUrl = item.getThumnail().getPath() + Const.SIZE_MEDIUM +
-                item.getThumnail().getExtension();
+            String avatarUrl = item.getThumbnail().getPath() + Const.SIZE_MEDIUM +
+                item.getThumbnail().getExtension();
             mTextName.setText(item.getName());
             Glide.with(mContext).load(avatarUrl).into(mImageAvatar);
+        }
+
+        @Override
+        public void onClick(View v) {
+            Result hero = mResults.get(getAdapterPosition());
+            mContext.startActivity(InformationActivity.getInstance(mContext, hero.getName()));
         }
     }
 }
