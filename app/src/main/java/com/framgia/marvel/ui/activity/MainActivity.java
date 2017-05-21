@@ -1,5 +1,6 @@
 package com.framgia.marvel.ui.activity;
 
+import android.app.ProgressDialog;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -46,6 +47,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     public void getData() {
+        final ProgressDialog dialog = new ProgressDialog(MainActivity.this);
+        dialog.show();
+        dialog.setMessage(getString(R.string.dialog_message));
+        dialog.setTitle(R.string.dialog_title);
+        dialog.setIndeterminate(false);
+        dialog.setCancelable(true);
         MarvelService service = ServiceGenerator.createService(MarvelService.class);
         service.getMarvel(Const.TS, Const.API_KEY, Const.HASH, String.valueOf(mOffset),
             String.valueOf(mLimit), null)
@@ -53,17 +60,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 @Override
                 public void onResponse(Call<MarvelModel> call, Response<MarvelModel> response) {
                     if (response != null) {
-                        //TODO: get data from api
                         MarvelModel model = response.body();
                         mResults = model.getData().getResults();
                         mAdapter = new RecyclerAdapter(mResults, MainActivity.this, mIsGrid);
                         mRecyclerView.setAdapter(mAdapter);
                     }
+                    dialog.dismiss();
                 }
 
                 @Override
                 public void onFailure(Call<MarvelModel> call, Throwable t) {
                     Toast.makeText(MainActivity.this, t.getMessage(), Toast.LENGTH_SHORT).show();
+                    dialog.dismiss();
                 }
             });
     }
@@ -76,5 +84,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 LinearLayoutManager(this));
         mAdapter = new RecyclerAdapter(mResults, MainActivity.this, mIsGrid);
         mRecyclerView.setAdapter(mAdapter);
+        mChangeButton.setImageResource(mIsGrid ? R.drawable.ic_list : R.drawable.ic_options);
     }
 }

@@ -32,7 +32,7 @@
             android:layout_below="@id/image_avatar"
             android:layout_margin="@dimen/dp_5"
             android:layout_toRightOf="@id/text_name"
-            android:scaleType="centerCrop"
+            android:scaleType="fitCenter"
             android:src="@drawable/ic_like_white"/>
 
     </RelativeLayout>
