@@ -56,7 +56,7 @@ public class MarvelDataSource extends DatabaseHelper {
         return null;
     }
 
-    public long insertContact(Result character) {
+    public long insertCharacter(Result character) {
         if (character != null) {
             SQLiteDatabase database = getWritableDatabase();
             ContentValues values = new ContentValues();
@@ -78,13 +78,34 @@ public class MarvelDataSource extends DatabaseHelper {
     public boolean deleteByID(int id) {
         SQLiteDatabase database = getWritableDatabase();
         try {
-            String whereClause = MarvelDatabase.MarvelEntry._ID + " =?";
+            String whereClause = MarvelDatabase.MarvelEntry.COLUMN_ID + " =?";
             String[] whereArgs = {String.valueOf(id)};
             return database.delete(MarvelDatabase.MarvelEntry.TABLE_NAME, whereClause, whereArgs)
                 > 0;
         } catch (Exception e) {
             return false;
         } finally {
+            database.close();
+        }
+    }
+
+    public boolean isInDatabse(int id) {
+        SQLiteDatabase database = getReadableDatabase();
+        String whereClause = MarvelDatabase.MarvelEntry.COLUMN_ID + "=?";
+        String[] whereArgs = {String.valueOf(id)};
+        Cursor cursor = database.query(MarvelDatabase.MarvelEntry.TABLE_NAME,
+            null,
+            whereClause,
+            whereArgs,
+            null,
+            null,
+            null);
+        try {
+            return cursor.getCount() > 0;
+        } catch (Exception e) {
+            return false;
+        } finally {
+            cursor.close();
             database.close();
         }
     }

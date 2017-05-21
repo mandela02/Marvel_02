@@ -1,6 +1,5 @@
 package com.framgia.marvel.ui.activity;
 
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,21 +12,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.framgia.marvel.R;
-import com.framgia.marvel.data.model.MarvelModel;
+import com.framgia.marvel.data.database.MarvelDataSource;
 import com.framgia.marvel.data.model.Result;
 import com.framgia.marvel.data.value.Const;
-import com.framgia.marvel.service.MarvelService;
-import com.framgia.marvel.service.ServiceGenerator;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-
-import static android.content.Intent.EXTRA_USER;
 
 public class InformationActivity extends AppCompatActivity implements View.OnClickListener {
     private FloatingActionButton mButtonLike;
@@ -35,12 +25,12 @@ public class InformationActivity extends AppCompatActivity implements View.OnCli
     private TextView mTextDes;
     private ImageView mImageAva;
     private Result mResult;
-    private String mName;
+    private MarvelDataSource mDatabase;
     private boolean mIsLiked;
 
-    public static Intent getInstance(Context context, String name) {
+    public static Intent getInstance(Context context, Result result) {
         Intent intent = new Intent(context, InformationActivity.class);
-        intent.putExtra(Const.EXTRA_NAME, name);
+        intent.putExtra(Const.Extra.EXTRA_NAME, result);
         return intent;
     }
 
@@ -48,33 +38,42 @@ public class InformationActivity extends AppCompatActivity implements View.OnCli
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_information);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        mTextDes = (TextView) findViewById(R.id.text_description);
-        mTextId = (TextView) findViewById(R.id.text_id);
-        mImageAva = (ImageView) findViewById(R.id.image_avatar_infor);
-        Intent intent = getIntent();
-        mName = intent.getParcelableExtra(Const.EXTRA_NAME);
-        setTitle(mName);
+        initView();
         getData();
-        mButtonLike = (FloatingActionButton) findViewById(R.id.btn_like);
-        mButtonLike.setOnClickListener(this);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        initToolbar();
+        displayData(mResult);
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_like:
-                //TODO: Add character to favorite list
                 mIsLiked = !mIsLiked;
+                if (mIsLiked) {
+                    addFavorite(mResult);
+                } else {
+                    removeFavorite(mResult);
+                }
+                Intent intent = new Intent();
+                setResult(RESULT_OK, intent);
                 mButtonLike
-                    .setImageResource(mIsLiked ? R.drawable.ic_like_red : R.drawable.ic_like_white);
-                Snackbar.make(v, mIsLiked ? R.string.add_message : R.string.delete_message,
+                    .setImageResource(mIsLiked ? R.drawable.ic_like_red : R.drawable
+                        .ic_like_white);
+                Snackbar.make(v, mIsLiked ? R.string.add_message :
+                        R.string.delete_message,
                     Snackbar.LENGTH_SHORT)
                     .setAction("Action", null).show();
         }
+    }
+
+    private void addFavorite(Result result) {
+        mDatabase.insertCharacter(result);
+        result.setLiked(true);
+    }
+
+    private void removeFavorite(Result result) {
+        mDatabase.deleteByID(result.getId());
+        result.setLiked(false);
     }
 
     @Override
@@ -96,47 +95,39 @@ public class InformationActivity extends AppCompatActivity implements View.OnCli
         return super.onOptionsItemSelected(item);
     }
 
-    public void getData() {
-        final ProgressDialog dialog = new ProgressDialog(InformationActivity.this);
-        dialog.show();
-        dialog.setMessage(getString(R.string.dialog_message));
-        dialog.setTitle(R.string.dialog_title);
-        dialog.setIndeterminate(false);
-        dialog.setCancelable(true);
-        MarvelService service = ServiceGenerator.createService(MarvelService.class);
-        service.getMarvel(Const.TS, Const.API_KEY, Const.HASH, null,
-            null, mName)
-            .enqueue(new Callback<MarvelModel>() {
-                @Override
-                public void onResponse(Call<MarvelModel> call, Response<MarvelModel> response) {
-                    if (response != null) {
-                        MarvelModel model = response.body();
-                        mResult = model.getData().getResults().get(0);
-                        mResult.setAvatar(mResult.getThumbnail().getPath() + Const.SIZE_DETAIL +
-                            mResult.getThumbnail().getExtension());
-                        displayData(mResult);
-                    }
-                    dialog.dismiss();
-                }
+    public void initToolbar() {
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        toolbar.setTitle(mResult.getName());
+    }
 
-                @Override
-                public void onFailure(Call<MarvelModel> call, Throwable t) {
-                    Toast.makeText(InformationActivity.this, t.getMessage(), Toast.LENGTH_SHORT)
-                        .show();
-                    dialog.dismiss();
-                }
-            });
+    public void initView() {
+        mTextDes = (TextView) findViewById(R.id.text_description);
+        mTextId = (TextView) findViewById(R.id.text_id);
+        mImageAva = (ImageView) findViewById(R.id.image_avatar_infor);
+        mButtonLike = (FloatingActionButton) findViewById(R.id.btn_like);
+        mButtonLike.setOnClickListener(this);
+    }
+
+    public void getData() {
+        Intent intent = getIntent();
+        mResult = intent.getParcelableExtra(Const.Extra.EXTRA_NAME);
+        mIsLiked = mResult.isLiked();
+        mDatabase = new MarvelDataSource(getApplicationContext());
     }
 
     private void displayData(Result result) {
-        String avatar = result.getThumbnail().getPath() + Const.SIZE_DETAIL + result.getThumbnail()
-            .getExtension();
+        String avatar = result.getAvatar();
         Glide.with(InformationActivity.this).load(avatar).into(mImageAva);
         mTextId.setText(getString(R.string.id) + result.getId());
         if (result.getDescription().equals(""))
             mTextDes.setText("\t" + getString(R.string.message));
         else {
-            mTextDes.setText(getString(R.string.description) + mResult.getDescription());
+            mTextDes.setText(getString(R.string.description) + result.getDescription());
         }
+        mButtonLike
+            .setImageResource(mIsLiked ? R.drawable.ic_like_red : R.drawable.ic_like_white);
     }
 }

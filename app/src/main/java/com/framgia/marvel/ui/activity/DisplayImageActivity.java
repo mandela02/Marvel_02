@@ -18,7 +18,7 @@ import static android.content.Intent.EXTRA_USER;
 public class DisplayImageActivity extends AppCompatActivity {
     public static Intent getInstance(Context context, Result result) {
         Intent intent = new Intent(context, DisplayImageActivity.class);
-        intent.putExtra(Const.EXTRA_RESULT, result);
+        intent.putExtra(Const.Extra.EXTRA_RESULT, result);
         return intent;
     }
 
@@ -27,7 +27,7 @@ public class DisplayImageActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fullscreen);
         Intent intent = getIntent();
-        Result result = intent.getParcelableExtra(Const.EXTRA_RESULT);
+        Result result = intent.getParcelableExtra(Const.Extra.EXTRA_RESULT);
         setTitle(result.getName());
         Glide.with(this).load(result.getAvatar()).into((ImageView) findViewById(R.id.image_full));
         ActionBar actionBar = getSupportActionBar();

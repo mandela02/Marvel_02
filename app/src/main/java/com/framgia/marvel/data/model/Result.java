@@ -23,6 +23,7 @@ public class Result implements Parcelable {
     private Thumbnail mThumbnail;
     private int mDbId;
     private String mAvatar;
+    private boolean mIsLiked;
     public static final Creator<Result> CREATOR = new Creator<Result>() {
         @Override
         public Result createFromParcel(Parcel in) {
@@ -41,6 +42,7 @@ public class Result implements Parcelable {
         mDescription = in.readString();
         mDbId = in.readInt();
         mAvatar = in.readString();
+        mIsLiked = in.readByte() != 0;
     }
 
     public Result(Cursor cursor) {
@@ -102,17 +104,26 @@ public class Result implements Parcelable {
         mAvatar = avatar;
     }
 
+    public boolean isLiked() {
+        return mIsLiked;
+    }
+
+    public void setLiked(boolean liked) {
+        mIsLiked = liked;
+    }
+
     @Override
     public int describeContents() {
         return 0;
     }
 
     @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(mId);
-        dest.writeString(mName);
-        dest.writeString(mDescription);
-        dest.writeInt(mDbId);
-        dest.writeString(mAvatar);
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeInt(mId);
+        parcel.writeString(mName);
+        parcel.writeString(mDescription);
+        parcel.writeInt(mDbId);
+        parcel.writeString(mAvatar);
+        parcel.writeByte((byte) (mIsLiked ? 1 : 0));
     }
 }
