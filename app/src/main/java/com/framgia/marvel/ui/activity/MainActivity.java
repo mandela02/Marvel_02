@@ -1,6 +1,7 @@
 package com.framgia.marvel.ui.activity;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -39,11 +40,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mResults = new ArrayList<>();
+        initView();
+        getData();
+    }
+
+    public void initView() {
         mRecyclerView = (RecyclerView) findViewById(R.id.recycler_heroes);
         mRecyclerView.setLayoutManager(new GridLayoutManager(this, 3));
         mChangeButton = (FloatingActionButton) findViewById(R.id.btn_change);
         mChangeButton.setOnClickListener(this);
-        getData();
     }
 
     public void getData() {
@@ -54,7 +59,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         dialog.setIndeterminate(false);
         dialog.setCancelable(true);
         MarvelService service = ServiceGenerator.createService(MarvelService.class);
-        service.getMarvel(Const.TS, Const.API_KEY, Const.HASH, String.valueOf(mOffset),
+        service.getMarvel(Const.Key.TS, Const.Key.API_KEY, Const.Key.HASH, String.valueOf(mOffset),
             String.valueOf(mLimit), null)
             .enqueue(new Callback<MarvelModel>() {
                 @Override
@@ -85,5 +90,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mAdapter = new RecyclerAdapter(mResults, MainActivity.this, mIsGrid);
         mRecyclerView.setAdapter(mAdapter);
         mChangeButton.setImageResource(mIsGrid ? R.drawable.ic_list : R.drawable.ic_options);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode != RESULT_OK) return;
+        switch (requestCode) {
+            case Const.RequestCode.REQUEST_CODE_INFOMATION:
+                mAdapter.notifyDataSetChanged();
+                break;
+            default:
+                break;
+        }
     }
 }
