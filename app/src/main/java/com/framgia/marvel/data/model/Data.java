@@ -14,7 +14,7 @@ public class Data {
     private List<Result> mResults;
     private String mHeadTitle;
 
-    public Data(String title,List<Result> results) {
+    public Data(String title, List<Result> results) {
         this.mResults = results;
         this.mHeadTitle = title;
     }

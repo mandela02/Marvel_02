@@ -45,8 +45,9 @@ public class CharactersAdapter
         MarvelDataSource database = new MarvelDataSource(mContext);
         Result item = mResults.get(position);
         item.setAvatar(
-            item.getThumbnail().getPath() + Const.Size.SIZE_DETAIL + item.getThumbnail().getExtension
-                ());
+            item.getThumbnail().getPath() + Const.Size.SIZE_DETAIL +
+                item.getThumbnail().getExtension
+                    ());
         item.setLiked(database.isInDatabse(item.getId()));
         holder.bindData(item);
     }

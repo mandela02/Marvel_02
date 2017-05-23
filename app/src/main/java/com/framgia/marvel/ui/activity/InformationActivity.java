@@ -37,10 +37,8 @@ import retrofit2.Response;
 
 public class InformationActivity extends AppCompatActivity implements View.OnClickListener {
     private FloatingActionButton mButtonLike;
-    private TextView mTextId;
     private TextView mTextDes;
     private ImageView mImageAva;
-    private ImageView mImageLittle;
     private RecyclerView mRecycler;
     private BookAdapter mAdapter;
     private Result mResult;
@@ -128,9 +126,7 @@ public class InformationActivity extends AppCompatActivity implements View.OnCli
 
     public void initView() {
         mTextDes = (TextView) findViewById(R.id.text_description);
-        mTextId = (TextView) findViewById(R.id.text_id);
         mImageAva = (ImageView) findViewById(R.id.image_avatar_infor);
-        mImageLittle = (ImageView) findViewById(R.id.image_little);
         mButtonLike = (FloatingActionButton) findViewById(R.id.btn_like);
         mButtonLike.setOnClickListener(this);
     }
@@ -148,8 +144,6 @@ public class InformationActivity extends AppCompatActivity implements View.OnCli
             Const.TYPE[1]);
         if (mResult.getEvents().getAvailable() != 0) getBookData(String.valueOf(mResult.getId()),
             Const.TYPE[2]);
-        if (mResult.getEvents().getAvailable() != 0) getBookData(String.valueOf(mResult.getId()),
-            Const.TYPE[3]);
     }
 
     public void getBookData(final String CollectionId, final String type) {
@@ -168,9 +162,7 @@ public class InformationActivity extends AppCompatActivity implements View.OnCli
                     MarvelModel model = response.body();
                     mBookInfor = model.getData().getResults();
                     mBookData
-                        .add(new Data(getString(R.string.infor_title_p1) + type + getString(R
-                            .string.infor_title_p2),
-                            mBookInfor));
+                        .add(new Data(type, mBookInfor));
                     mAdapter = new BookAdapter(InformationActivity.this, mBookData);
                     mRecycler.setAdapter(mAdapter);
                 }
@@ -188,14 +180,11 @@ public class InformationActivity extends AppCompatActivity implements View.OnCli
 
     private void displayData(Result result) {
         Glide.with(InformationActivity.this).load(result.getAvatar()).into(mImageAva);
-        //for fun :)
-        Glide.with(InformationActivity.this).load(result.getAvatar()).into(mImageLittle);
-        mTextId.setText(getString(R.string.id) + result.getId());
         if (result.getDescription().equals(""))
             mTextDes.setText(getString(R.string.eleven_tab) +
                 getString(R.string.message));
         else {
-            mTextDes.setText(getString(R.string.eleven_tab) + getString(R.string.description) +
+            mTextDes.setText(getString(R.string.eleven_tab) +
                 result.getDescription());
         }
         mButtonLike

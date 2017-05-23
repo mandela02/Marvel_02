@@ -8,7 +8,7 @@ import com.google.gson.annotations.SerializedName;
 /**
  * Created by asus on 5/12/2017.
  */
-public class Thumbnail implements Parcelable{
+public class Thumbnail implements Parcelable {
     @SerializedName("path")
     private String mPath;
     @SerializedName("extension")
