@@ -2,12 +2,16 @@ package com.framgia.marvel.ui.activity;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Toast;
 
@@ -40,15 +44,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mResults = new ArrayList<>();
+        initToolbar();
         initView();
         getData();
     }
 
     public void initView() {
         mRecyclerView = (RecyclerView) findViewById(R.id.recycler_heroes);
-        mRecyclerView.setLayoutManager(new GridLayoutManager(this, 3));
+        mRecyclerView.setLayoutManager(new GridLayoutManager(this, Const.COLUMN_NUMB));
         mChangeButton = (FloatingActionButton) findViewById(R.id.btn_change);
         mChangeButton.setOnClickListener(this);
+    }
+
+    public void initToolbar() {
+        ActionBar actionBar = getSupportActionBar();
+        ColorDrawable colorDrawable = new ColorDrawable(Color.parseColor(getString(R.string.red)));
+        actionBar.setBackgroundDrawable(colorDrawable);
     }
 
     public void getData() {

@@ -6,6 +6,10 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+<<<<<<< HEAD
+=======
+import android.widget.LinearLayout;
+>>>>>>> 45ed1faa6880e149d346a49b3ec64145ca4c5e2b
 import android.widget.TextView;
 
 import com.framgia.marvel.R;
@@ -37,14 +41,24 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.ViewHolder> {
     public void onBindViewHolder(BookAdapter.ViewHolder holder, int position) {
         List item = mDatas.get(position).getResults();
         holder.mTextInfor.setText(mDatas.get(position).getHeadTitle());
+<<<<<<< HEAD
         CollectionAdapter adapter = new CollectionAdapter(mContext,item);
         holder.mRecyclerInfor.setLayoutManager(new LinearLayoutManager(mContext));
+=======
+        CollectionAdapter adapter = new CollectionAdapter(mContext, item);
+        holder.mRecyclerInfor.setLayoutManager(new LinearLayoutManager(mContext, LinearLayout
+            .HORIZONTAL, false));
+>>>>>>> 45ed1faa6880e149d346a49b3ec64145ca4c5e2b
         holder.mRecyclerInfor.setAdapter(adapter);
     }
 
     @Override
     public int getItemCount() {
+<<<<<<< HEAD
         return mDatas!=null?mDatas.size():0;
+=======
+        return mDatas != null ? mDatas.size() : 0;
+>>>>>>> 45ed1faa6880e149d346a49b3ec64145ca4c5e2b
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

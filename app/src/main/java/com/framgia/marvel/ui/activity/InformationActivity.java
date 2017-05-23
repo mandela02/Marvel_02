@@ -37,10 +37,12 @@ import retrofit2.Response;
 
 public class InformationActivity extends AppCompatActivity implements View.OnClickListener {
     private FloatingActionButton mButtonLike;
-    private TextView mTextId;
     private TextView mTextDes;
     private ImageView mImageAva;
+<<<<<<< HEAD
     private ImageView mImageLittle;
+=======
+>>>>>>> 45ed1faa6880e149d346a49b3ec64145ca4c5e2b
     private RecyclerView mRecycler;
     private BookAdapter mAdapter;
     private Result mResult;
@@ -128,7 +130,6 @@ public class InformationActivity extends AppCompatActivity implements View.OnCli
 
     public void initView() {
         mTextDes = (TextView) findViewById(R.id.text_description);
-        mTextId = (TextView) findViewById(R.id.text_id);
         mImageAva = (ImageView) findViewById(R.id.image_avatar_infor);
         mImageLittle = (ImageView) findViewById(R.id.image_little);
         mButtonLike = (FloatingActionButton) findViewById(R.id.btn_like);
@@ -148,8 +149,11 @@ public class InformationActivity extends AppCompatActivity implements View.OnCli
             Const.TYPE[1]);
         if (mResult.getEvents().getAvailable() != 0) getBookData(String.valueOf(mResult.getId()),
             Const.TYPE[2]);
+<<<<<<< HEAD
         if (mResult.getEvents().getAvailable() != 0) getBookData(String.valueOf(mResult.getId()),
             Const.TYPE[3]);
+=======
+>>>>>>> 45ed1faa6880e149d346a49b3ec64145ca4c5e2b
     }
 
     public void getBookData(final String CollectionId, final String type) {
@@ -168,9 +172,13 @@ public class InformationActivity extends AppCompatActivity implements View.OnCli
                     MarvelModel model = response.body();
                     mBookInfor = model.getData().getResults();
                     mBookData
+<<<<<<< HEAD
                         .add(new Data(getString(R.string.infor_title_p1) + type + getString(R
                             .string.infor_title_p2),
                             mBookInfor));
+=======
+                        .add(new Data(type, mBookInfor));
+>>>>>>> 45ed1faa6880e149d346a49b3ec64145ca4c5e2b
                     mAdapter = new BookAdapter(InformationActivity.this, mBookData);
                     mRecycler.setAdapter(mAdapter);
                 }
@@ -188,15 +196,22 @@ public class InformationActivity extends AppCompatActivity implements View.OnCli
 
     private void displayData(Result result) {
         Glide.with(InformationActivity.this).load(result.getAvatar()).into(mImageAva);
+<<<<<<< HEAD
         //for fun :)
         Glide.with(InformationActivity.this).load(result.getAvatar()).into(mImageLittle);
         mTextId.setText(getString(R.string.id) + result.getId());
+=======
+>>>>>>> 45ed1faa6880e149d346a49b3ec64145ca4c5e2b
         if (result.getDescription().equals(""))
             mTextDes.setText(getString(R.string.eleven_tab) +
                 getString(R.string.message));
         else {
+<<<<<<< HEAD
             mTextDes.setText(getString(R.string.eleven_tab) + getString(R.string.description) +
                 result.getDescription());
+=======
+            mTextDes.setText(getString(R.string.eleven_tab) + result.getDescription());
+>>>>>>> 45ed1faa6880e149d346a49b3ec64145ca4c5e2b
         }
         mButtonLike
             .setImageResource(mIsLiked ? R.drawable.ic_like_red : R.drawable.ic_like_white);
