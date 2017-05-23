@@ -4,10 +4,8 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.widget.Toast;
 
 import com.framgia.marvel.data.model.Result;
-import com.framgia.marvel.ui.activity.MainActivity;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -17,8 +17,8 @@
         android:layout_marginRight="@dimen/dp_16"
         android:backgroundTint="@color/colorPrimary"
         android:src="@drawable/ic_list"
-        app:elevation="@dimen/dp_6"
         app:borderWidth="@dimen/dp_0"
+        app:elevation="@dimen/dp_6"
         app:pressedTranslationZ="@dimen/dp_12"/>
 
     <android.support.v7.widget.RecyclerView

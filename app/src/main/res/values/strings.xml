@@ -1,16 +1,18 @@
 <resources>
-    <string name="app_name">My Application</string>
+    <string name="app_name">Marvel Suck</string>
     <string name="size_medium">/standard_medium.</string>
     <string name="title_activity_hero_information">HeroInformationActivity</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_information">InformationActivity</string>
     <string name="wait">Wait for it ...</string>
-    <string name="message">Sorry! We don\'t have any description about this character.</string>
+    <string name="message">.NO INFORMATION.</string>
     <string name="zoom">Open image in fullscreen</string>
     <string name="add_message">Haha, you like this character.</string>
     <string name="delete_message">Haha, you hate this character</string>
     <string name="dialog_message">Loading ...</string>
     <string name="dialog_title">Checking Network</string>
     <string name="id">Id:</string>
-    <string name="description">Description:</string>
+    <string name="description">Description: </string>
+    <string name="eleven_tab">\t\t\t\t\t\t\t\t</string>
+    <string name="red">#ffff4444</string>
 </resources>

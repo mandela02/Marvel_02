@@ -13,8 +13,6 @@ import com.framgia.marvel.R;
 import com.framgia.marvel.data.model.Result;
 import com.framgia.marvel.data.value.Const;
 
-import static android.content.Intent.EXTRA_USER;
-
 public class DisplayImageActivity extends AppCompatActivity {
     public static Intent getInstance(Context context, Result result) {
         Intent intent = new Intent(context, DisplayImageActivity.class);
