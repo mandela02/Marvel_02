@@ -2,7 +2,6 @@ package com.framgia.marvel.ui.adapter;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,31 +21,32 @@ import java.util.List;
 /**
  * Created by asus on 5/12/2017.
  */
-public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHolder> {
+public class CharactersAdapter
+    extends RecyclerView.Adapter<CharactersAdapter.ViewHolder> {
     private List<Result> mResults;
     private Context mContext;
     private boolean mIsGrid;
 
-    public RecyclerAdapter(List<Result> mResults, Context mContext, boolean isGrid) {
+    public CharactersAdapter(List<Result> mResults, Context mContext, boolean isGrid) {
         this.mResults = mResults;
         this.mContext = mContext;
         this.mIsGrid = isGrid;
     }
 
     @Override
-    public RecyclerAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public CharactersAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext())
             .inflate(mIsGrid ? R.layout.grid_item : R.layout.recycler_item, parent, false);
         return new ViewHolder(v);
     }
 
     @Override
-    public void onBindViewHolder(RecyclerAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(CharactersAdapter.ViewHolder holder, int position) {
         MarvelDataSource database = new MarvelDataSource(mContext);
         Result item = mResults.get(position);
         item.setAvatar(
             item.getThumbnail().getPath() + Const.Size.SIZE_DETAIL + item.getThumbnail().getExtension
-            ());
+                ());
         item.setLiked(database.isInDatabse(item.getId()));
         holder.bindData(item);
     }
@@ -102,9 +102,5 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
                     }
             }
         }
-    }
-
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        notifyDataSetChanged();
     }
 }

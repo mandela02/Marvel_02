@@ -17,7 +17,7 @@ import com.framgia.marvel.data.model.Result;
 import com.framgia.marvel.data.value.Const;
 import com.framgia.marvel.service.MarvelService;
 import com.framgia.marvel.service.ServiceGenerator;
-import com.framgia.marvel.ui.adapter.RecyclerAdapter;
+import com.framgia.marvel.ui.adapter.CharactersAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,7 +29,7 @@ import retrofit2.Response;
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     private List<Result> mResults;
     private RecyclerView mRecyclerView;
-    private RecyclerAdapter mAdapter;
+    private CharactersAdapter mAdapter;
     private FloatingActionButton mChangeButton;
     private int mOffset = 0;
     private int mLimit = 100;
@@ -59,7 +59,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         dialog.setIndeterminate(false);
         dialog.setCancelable(true);
         MarvelService service = ServiceGenerator.createService(MarvelService.class);
-        service.getMarvel(Const.Key.TS, Const.Key.API_KEY, Const.Key.HASH, String.valueOf(mOffset),
+        service.getMarvel(Const.Key.TS, Const.Key.API_KEY, Const.Key.HASH, String.valueOf
+                (mOffset),
             String.valueOf(mLimit), null)
             .enqueue(new Callback<MarvelModel>() {
                 @Override
@@ -67,7 +68,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     if (response != null) {
                         MarvelModel model = response.body();
                         mResults = model.getData().getResults();
-                        mAdapter = new RecyclerAdapter(mResults, MainActivity.this, mIsGrid);
+                        mAdapter = new CharactersAdapter(mResults, MainActivity.this, mIsGrid);
                         mRecyclerView.setAdapter(mAdapter);
                     }
                     dialog.dismiss();
@@ -87,7 +88,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mRecyclerView
             .setLayoutManager(mIsGrid ? new GridLayoutManager(this, Const.COLUMN_NUMB) : new
                 LinearLayoutManager(this));
-        mAdapter = new RecyclerAdapter(mResults, MainActivity.this, mIsGrid);
+        mAdapter = new CharactersAdapter(mResults, MainActivity.this, mIsGrid);
         mRecyclerView.setAdapter(mAdapter);
         mChangeButton.setImageResource(mIsGrid ? R.drawable.ic_list : R.drawable.ic_options);
     }
