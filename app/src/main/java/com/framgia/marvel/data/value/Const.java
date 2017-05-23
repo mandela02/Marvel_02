@@ -19,9 +19,12 @@ public class Const {
         public static final String EXTRA_NAME = "com.framgia.marvel.EXTRA_NAME";
         public static final String EXTRA_RESULT = "com.framgia.marvel.EXTRA_RESULT";
     }
+
     public static class RequestCode {
         public static final int REQUEST_CODE_INFOMATION = 100;
     }
+
     public static final int COLUMN_NUMB = 3;
+    public static final String TYPE[] = {"comics", "series", "events", "stories"};
 }
 

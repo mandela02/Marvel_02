@@ -12,5 +12,8 @@
     <string name="dialog_message">Loading ...</string>
     <string name="dialog_title">Checking Network</string>
     <string name="id">Id:</string>
-    <string name="description">Description:</string>
+    <string name="description">Description: </string>
+    <string name="eleven_tab">\t\t\t\t\t\t\t\t\t\t\t</string>
+    <string name="infor_title_p1">List of\t</string>
+    <string name="infor_title_p2">\t in which this character appears:</string>
 </resources>
