@@ -17,15 +17,25 @@
         android:layout_marginRight="@dimen/dp_16"
         android:backgroundTint="@color/colorPrimary"
         android:src="@drawable/ic_list"
-        app:elevation="@dimen/dp_6"
         app:borderWidth="@dimen/dp_0"
+        app:elevation="@dimen/dp_6"
         app:pressedTranslationZ="@dimen/dp_12"/>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycler_heroes"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_margin="@dimen/dp_5"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="@dimen/dp_5"
+        android:layout_marginRight="@dimen/dp_5"
         android:gravity="center"/>
 
+    <ProgressBar
+        android:id="@+id/progress_heroes"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:visibility="gone"/>
 </RelativeLayout>
