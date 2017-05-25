@@ -24,6 +24,10 @@ public class Const {
         public static final int REQUEST_CODE_INFOMATION = 100;
     }
 
+    public static class Bundle {
+        public static final String BUNDLE_SEARCH = "com.framgia.marvel.BUNDLE_SEARCH";
+    }
+
     public static final int COLUMN_NUMB = 3;
     public static final String TYPE[] = {"comics", "series", "events", "stories"};
 }

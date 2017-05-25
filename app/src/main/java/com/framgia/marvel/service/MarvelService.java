@@ -13,5 +13,6 @@ public interface MarvelService {
     @GET("v1/public/characters")
     Call<MarvelModel> getMarvel(@Query("ts") String ts, @Query("apikey") String apikey,
                                 @Query("hash") String hash, @Query("offset") String offset,
-                                @Query("limit") String limit, @Query("name") String name);
+                                @Query("limit") String limit, @Query("name") String name,
+                                @Query("nameStartsWith") String startwith);
 }
