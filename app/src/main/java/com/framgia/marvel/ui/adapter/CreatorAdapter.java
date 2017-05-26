@@ -1,6 +1,5 @@
 package com.framgia.marvel.ui.adapter;
 
-import android.app.Activity;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -14,19 +13,17 @@ import com.framgia.marvel.R;
 import com.framgia.marvel.data.model.Result;
 import com.framgia.marvel.data.value.Const;
 import com.framgia.marvel.ui.activity.ComicActivity;
-import com.framgia.marvel.ui.activity.DisplayImageActivity;
-import com.framgia.marvel.ui.activity.InformationActivity;
 
 import java.util.List;
 
 /**
- * Created by Bruce Wayne on 5/22/2017.
+ * Created by Bruce Wayne on 5/26/2017.
  */
-public class CollectionAdapter extends RecyclerView.Adapter<CollectionAdapter.ViewHolder> {
+public class CreatorAdapter extends RecyclerView.Adapter<CreatorAdapter.ViewHolder>{
     private Context mContext;
     private List<Result> mResults;
 
-    public CollectionAdapter(Context context,
+    public CreatorAdapter(Context context,
                              List<Result> results) {
         this.mContext = context;
         this.mResults = results;
@@ -51,22 +48,13 @@ public class CollectionAdapter extends RecyclerView.Adapter<CollectionAdapter.Vi
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        private ImageView mImageBookAvatar;
-        private TextView mTextBookTitle;
+        private ImageView mImageAvatar;
+        private TextView mTextName;
 
         public ViewHolder(View itemView) {
             super(itemView);
-            mImageBookAvatar = (ImageView) itemView.findViewById(R.id.image_book_avatar);
-            mTextBookTitle = (TextView) itemView.findViewById(R.id.text_book_name);
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Result hero = mResults.get(getAdapterPosition());
-                    hero.setAvatar(hero.getThumbnail().getPath() + Const.Size.SIZE_DETAIL +
-                        hero.getThumbnail().getExtension());
-                    mContext.startActivity(ComicActivity.getInstance(mContext, hero));
-                }
-            });
+            mImageAvatar = (ImageView) itemView.findViewById(R.id.image_book_avatar);
+            mTextName = (TextView) itemView.findViewById(R.id.text_book_name);
         }
 
         public void bindData(Result item) {
@@ -74,8 +62,8 @@ public class CollectionAdapter extends RecyclerView.Adapter<CollectionAdapter.Vi
             String avatarUrl = item.getThumbnail() != null ? item.getThumbnail().getPath() +
                 Const.Size.SIZE_MEDIUM +
                 item.getThumbnail().getExtension() : null;
-            Glide.with(mContext).load(avatarUrl).error(R.drawable.no_image).into(mImageBookAvatar);
-            mTextBookTitle.setText(item.getTitle());
+            Glide.with(mContext).load(avatarUrl).error(R.drawable.no_image).into(mImageAvatar);
+            mTextName.setText(item.getFullName());
         }
     }
 }

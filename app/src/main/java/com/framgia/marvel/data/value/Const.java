@@ -18,6 +18,7 @@ public class Const {
     public static class Extra {
         public static final String EXTRA_NAME = "com.framgia.marvel.EXTRA_NAME";
         public static final String EXTRA_RESULT = "com.framgia.marvel.EXTRA_RESULT";
+        public static final String EXTRA_COMIC = "com.framgia.marvel.EXTRA_COMIC";
     }
 
     public static class RequestCode {
@@ -29,6 +30,7 @@ public class Const {
     }
 
     public static final int COLUMN_NUMB = 3;
-    public static final String TYPE[] = {"comics", "series", "events", "stories"};
+    public static final String TYPE[] = {"comics", "series", "events", "stories","creators",
+        "characters"};
 }
 

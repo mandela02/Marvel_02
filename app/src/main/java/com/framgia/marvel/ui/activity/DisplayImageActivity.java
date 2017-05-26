@@ -11,14 +11,13 @@ import android.widget.ImageView;
 import com.bumptech.glide.Glide;
 import com.framgia.marvel.R;
 import com.framgia.marvel.data.model.Result;
+import com.framgia.marvel.data.model.Thumbnail;
 import com.framgia.marvel.data.value.Const;
 
-import uk.co.senab.photoview.PhotoViewAttacher;
-
 public class DisplayImageActivity extends AppCompatActivity {
-    public static Intent getInstance(Context context, Result result) {
+    public static Intent getInstance(Context context, String thumbnail) {
         Intent intent = new Intent(context, DisplayImageActivity.class);
-        intent.putExtra(Const.Extra.EXTRA_RESULT, result);
+        intent.putExtra(Const.Extra.EXTRA_RESULT, thumbnail);
         return intent;
     }
 
@@ -26,13 +25,10 @@ public class DisplayImageActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fullscreen);
+        setTitle("");
         Intent intent = getIntent();
-        Result result = intent.getParcelableExtra(Const.Extra.EXTRA_RESULT);
-        setTitle(result.getName());
-        Glide.with(this).load(result.getAvatar()).into((ImageView) findViewById(R.id.image_full));
-        PhotoViewAttacher photoViewAttacher = new PhotoViewAttacher(
-            (ImageView) findViewById(R.id.image_full));
-        photoViewAttacher.update();
+        String thumbnail = intent.getStringExtra(Const.Extra.EXTRA_RESULT);
+        Glide.with(this).load(thumbnail).into((ImageView) findViewById(R.id.image_full));
         ActionBar actionBar = getSupportActionBar();
         actionBar.setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);

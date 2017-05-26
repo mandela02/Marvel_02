@@ -24,6 +24,11 @@
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
         <activity android:name=".ui.activity.DisplayImageActivity"/>
+        <activity
+            android:name=".ui.activity.ComicActivity"
+            android:label="@string/title_activity_comic"
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
     </application>
 
 </manifest>
