@@ -13,6 +13,8 @@ import com.framgia.marvel.R;
 import com.framgia.marvel.data.model.Result;
 import com.framgia.marvel.data.value.Const;
 
+import uk.co.senab.photoview.PhotoViewAttacher;
+
 public class DisplayImageActivity extends AppCompatActivity {
     public static Intent getInstance(Context context, Result result) {
         Intent intent = new Intent(context, DisplayImageActivity.class);
@@ -28,6 +30,9 @@ public class DisplayImageActivity extends AppCompatActivity {
         Result result = intent.getParcelableExtra(Const.Extra.EXTRA_RESULT);
         setTitle(result.getName());
         Glide.with(this).load(result.getAvatar()).into((ImageView) findViewById(R.id.image_full));
+        PhotoViewAttacher photoViewAttacher = new PhotoViewAttacher(
+            (ImageView) findViewById(R.id.image_full));
+        photoViewAttacher.update();
         ActionBar actionBar = getSupportActionBar();
         actionBar.setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
