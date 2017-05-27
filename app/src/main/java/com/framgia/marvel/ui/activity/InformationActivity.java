@@ -108,7 +108,7 @@ public class InformationActivity extends AppCompatActivity implements View.OnCli
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_zoom:
-                startActivity(DisplayImageActivity.getInstance(this, mResult));
+                startActivity(DisplayImageActivity.getInstance(this, mResult.getAvatar()));
                 break;
             case android.R.id.home:
                 finish();
@@ -138,7 +138,7 @@ public class InformationActivity extends AppCompatActivity implements View.OnCli
         mDatabase = new MarvelDataSource(getApplicationContext());
         mRecycler = (RecyclerView) findViewById(R.id.recycler_title_infor);
         mRecycler.setLayoutManager(new LinearLayoutManager(InformationActivity.this));
-        if (mResult.getComics().getAvailable() != 0) getBookData(String.valueOf(mResult.getId()),
+       if (mResult.getComics().getAvailable() != 0) getBookData(String.valueOf(mResult.getId()),
             Const.TYPE[0]);
         if (mResult.getSeries().getAvailable() != 0) getBookData(String.valueOf(mResult.getId()),
             Const.TYPE[1]);
@@ -154,7 +154,9 @@ public class InformationActivity extends AppCompatActivity implements View.OnCli
         dialog.setIndeterminate(false);
         dialog.setCancelable(true);
         CollectionService service = ServiceGenerator.createService(CollectionService.class);
-        service.getMarvel(CollectionId, type, Const.Key.TS, Const.Key.API_KEY, Const.Key.HASH,
+        service.getMarvel(Const.TYPE[5],CollectionId, type, Const.Key.TS, Const.Key.API_KEY, Const
+                .Key
+                .HASH,
             String.valueOf(mLimit)).enqueue(new Callback<MarvelModel>() {
             @Override
             public void onResponse(Call<MarvelModel> call, Response<MarvelModel> response) {
@@ -179,7 +181,7 @@ public class InformationActivity extends AppCompatActivity implements View.OnCli
     }
 
     private void displayData(Result result) {
-        Glide.with(InformationActivity.this).load(result.getAvatar()).into(mImageAva);
+        Glide.with(InformationActivity.this).load(result.getAvatar()).centerCrop().into(mImageAva);
         if (result.getDescription().equals(""))
             mTextDes.setText(getString(R.string.eleven_tab) +
                 getString(R.string.message));
