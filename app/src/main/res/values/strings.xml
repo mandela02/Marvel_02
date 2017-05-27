@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">My Application</string>
+    <string name="app_name">Marvel Universe</string>
     <string name="size_medium">/standard_medium.</string>
     <string name="title_activity_hero_information">HeroInformationActivity</string>
     <string name="action_settings">Settings</string>
@@ -21,4 +21,5 @@
     <string name="creators">Creators</string>
     <string name="characters">Characters</string>
     <string name="images">Images</string>
+    <string name="action_favorite">Favorite List</string>
 </resources>

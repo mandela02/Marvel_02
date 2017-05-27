@@ -104,7 +104,7 @@ public class ComicActivity extends AppCompatActivity {
             .setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         if (mResult.getCharacters().getAvailable() != 0)
             getData(mCharacterList, String.valueOf(mResult.getId()), Const.TYPE[5]);
-        mCharacterAdapter = new CharactersAdapter(mCharacterList, ComicActivity.this, true);
+        mCharacterAdapter = new CharactersAdapter(mCharacterList, ComicActivity.this, true,false);
         mCharacterRecycler.setAdapter(mCharacterAdapter);
         mCharacterRecycler.setHasFixedSize(true);
     }
