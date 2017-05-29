@@ -1,14 +1,10 @@
 package com.framgia.marvel.ui.activity;
 
-import android.app.Fragment;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.os.Handler;
-import android.os.Message;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -32,7 +28,6 @@ import com.framgia.marvel.ui.adapter.CharactersAdapter;
 import com.framgia.marvel.ui.adapter.EndlessRecyclerViewScrollListener;
 import com.framgia.marvel.ui.fragment.SearchFragment;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -70,7 +65,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.search_menu, menu);
+        getMenuInflater().inflate(R.menu.menu, menu);
         MenuItem menuSearch = menu.findItem(R.id.menu_search);
         mSearchView = (SearchView) menuSearch.getActionView();
         mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -91,11 +86,25 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     getSupportFragmentManager().beginTransaction()
                         .replace(R.id.frame_search, mSearchFragment)
                         .addToBackStack(null).commit();
+                    mChangeButton.setVisibility(View.GONE);
                 }
                 return false;
             }
         });
         return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_favorite:
+                Intent intent = new Intent(MainActivity.this, FavoriteActivity.class);
+                startActivityForResult(intent,Const.RequestCode.REQUEST_CODE_INFOMATION);
+                break;
+            default:
+                break;
+        }
+                return super.onOptionsItemSelected(item);
     }
 
     private void initToolbar() {
@@ -109,6 +118,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
             getSupportFragmentManager().popBackStack();
             mSearchView.onActionViewCollapsed();
+            mChangeButton.setVisibility(View.VISIBLE);
         } else
             super.onBackPressed();
     }
@@ -165,7 +175,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     public void initRecyclerView() {
-        mAdapter = new CharactersAdapter(mResults, MainActivity.this, mIsGrid);
+        mAdapter = new CharactersAdapter(mResults, MainActivity.this, mIsGrid, false);
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView
             .addOnScrollListener(new EndlessRecyclerViewScrollListener

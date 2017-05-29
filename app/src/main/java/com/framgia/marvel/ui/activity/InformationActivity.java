@@ -138,12 +138,12 @@ public class InformationActivity extends AppCompatActivity implements View.OnCli
         mDatabase = new MarvelDataSource(getApplicationContext());
         mRecycler = (RecyclerView) findViewById(R.id.recycler_title_infor);
         mRecycler.setLayoutManager(new LinearLayoutManager(InformationActivity.this));
-       if (mResult.getComics().getAvailable() != 0) getBookData(String.valueOf(mResult.getId()),
-            Const.TYPE[0]);
-        if (mResult.getSeries().getAvailable() != 0) getBookData(String.valueOf(mResult.getId()),
-            Const.TYPE[1]);
-        if (mResult.getEvents().getAvailable() != 0) getBookData(String.valueOf(mResult.getId()),
-            Const.TYPE[2]);
+        if (mResult.getComics() != null) if (mResult.getComics().getAvailable() != 0) getBookData
+            (String.valueOf(mResult.getId()), Const.TYPE[0]);
+        if (mResult.getSeries() != null) if (mResult.getSeries().getAvailable() != 0) getBookData
+            (String.valueOf(mResult.getId()), Const.TYPE[1]);
+        if (mResult.getEvents() != null) if (mResult.getEvents().getAvailable() != 0) getBookData
+            (String.valueOf(mResult.getId()), Const.TYPE[2]);
     }
 
     public void getBookData(final String CollectionId, final String type) {
@@ -154,7 +154,7 @@ public class InformationActivity extends AppCompatActivity implements View.OnCli
         dialog.setIndeterminate(false);
         dialog.setCancelable(true);
         CollectionService service = ServiceGenerator.createService(CollectionService.class);
-        service.getMarvel(Const.TYPE[5],CollectionId, type, Const.Key.TS, Const.Key.API_KEY, Const
+        service.getMarvel(Const.TYPE[5], CollectionId, type, Const.Key.TS, Const.Key.API_KEY, Const
                 .Key
                 .HASH,
             String.valueOf(mLimit)).enqueue(new Callback<MarvelModel>() {

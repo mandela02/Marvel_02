@@ -2,6 +2,7 @@ package com.framgia.marvel.ui.adapter;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +19,8 @@ import com.framgia.marvel.ui.activity.InformationActivity;
 
 import java.util.List;
 
+import static android.app.Activity.RESULT_OK;
+
 /**
  * Created by asus on 5/12/2017.
  */
@@ -26,35 +29,37 @@ public class CharactersAdapter
     private List<Result> mResults;
     private Context mContext;
     private boolean mIsGrid;
+    private boolean mIsInFav;
 
-    public CharactersAdapter(List<Result> mResults, Context mContext, boolean isGrid) {
+    public CharactersAdapter(List<Result> mResults, Context mContext, boolean isGrid, boolean
+        isFav) {
         this.mResults = mResults;
         this.mContext = mContext;
         this.mIsGrid = isGrid;
+        this.mIsInFav = isFav;
     }
 
     @Override
-    public CharactersAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext())
             .inflate(mIsGrid ? R.layout.grid_item : R.layout.recycler_item, parent, false);
         return new ViewHolder(v);
     }
 
     @Override
-    public void onBindViewHolder(CharactersAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(ViewHolder holder, int position) {
         MarvelDataSource database = new MarvelDataSource(mContext);
         Result item = mResults.get(position);
-        item.setAvatar(
-            item.getThumbnail().getPath() + Const.Size.SIZE_DETAIL +
-                item.getThumbnail().getExtension
-                    ());
         item.setLiked(database.isInDatabse(item.getId()));
         holder.bindData(item);
+        if (item.getThumbnail() != null) item.setAvatar(
+            item.getThumbnail().getPath() + Const.Size.SIZE_DETAIL +
+                item.getThumbnail().getExtension());
     }
 
     @Override
     public int getItemCount() {
-        return mResults.size();
+        return mResults != null ? mResults.size() : 0;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -75,10 +80,12 @@ public class CharactersAdapter
 
         public void bindData(Result item) {
             if (item == null) return;
-            String avatarUrl = item.getThumbnail().getPath() + Const.Size.SIZE_MEDIUM +
-                item.getThumbnail().getExtension();
+            if (item.getThumbnail() != null)
+                item.setAvatar(item.getThumbnail().getPath() + Const.Size
+                    .SIZE_MEDIUM +
+                    item.getThumbnail().getExtension());
             mTextName.setText(item.getName());
-            Glide.with(mContext).load(avatarUrl).into(mImageAvatar);
+            Glide.with(mContext).load(item.getAvatar()).into(mImageAvatar);
             mImageLike.setImageResource(item.isLiked() ? R.drawable
                 .ic_like_red : R.drawable.ic_like_white);
         }
@@ -96,11 +103,17 @@ public class CharactersAdapter
                         mDatabase.deleteByID(mResults.get(getAdapterPosition()).getId());
                         mResults.get(getAdapterPosition()).setLiked(false);
                         notifyItemChanged(getAdapterPosition());
+                        if (mIsInFav == true) {
+                            mResults.remove(getAdapterPosition());
+                            notifyDataSetChanged();
+                        }
                     } else {
                         mDatabase.insertCharacter(mResults.get(getAdapterPosition()));
                         mResults.get(getAdapterPosition()).setLiked(true);
                         notifyItemChanged(getAdapterPosition());
                     }
+                    Intent intent = new Intent();
+                    ((Activity) mContext).setResult(RESULT_OK, intent);
             }
         }
     }
