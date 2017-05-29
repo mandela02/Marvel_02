@@ -10,9 +10,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -20,13 +21,12 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.framgia.marvel.R;
 import com.framgia.marvel.data.database.MarvelDataSource;
-import com.framgia.marvel.data.model.Data;
 import com.framgia.marvel.data.model.MarvelModel;
 import com.framgia.marvel.data.model.Result;
 import com.framgia.marvel.data.value.Const;
 import com.framgia.marvel.service.CollectionService;
 import com.framgia.marvel.service.ServiceGenerator;
-import com.framgia.marvel.ui.adapter.BookAdapter;
+import com.framgia.marvel.ui.adapter.CollectionAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,13 +39,14 @@ public class InformationActivity extends AppCompatActivity implements View.OnCli
     private FloatingActionButton mButtonLike;
     private TextView mTextDes;
     private ImageView mImageAva;
-    private RecyclerView mRecycler;
-    private BookAdapter mAdapter;
+    private RecyclerView mRecyclerComics;
+    private RecyclerView mRecyclerEvents;
+    private RecyclerView mRecyclerSeries;
+    private CollectionAdapter mAdapterComics, mAdapterSeries, mAdapterEvents;
     private Result mResult;
     private MarvelDataSource mDatabase;
     private boolean mIsLiked;
-    private List<Data> mBookData;
-    private List<Result> mBookInfor;
+    private List<Result> mComics, mSeries, mEvents;
     private int mLimit = 100;
 
     public static Intent getInstance(Context context, Result result) {
@@ -57,9 +58,10 @@ public class InformationActivity extends AppCompatActivity implements View.OnCli
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+            WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_information);
-        mBookData = new ArrayList<>();
-        mBookInfor = new ArrayList<>();
         initView();
         getData();
         initToolbar();
@@ -85,6 +87,10 @@ public class InformationActivity extends AppCompatActivity implements View.OnCli
                         R.string.delete_message,
                     Snackbar.LENGTH_SHORT)
                     .setAction("Action", null).show();
+                break;
+            case R.id.image_avatar_infor:
+                startActivity(DisplayImageActivity.getInstance(this, mResult.getAvatar()));
+                break;
         }
     }
 
@@ -99,17 +105,8 @@ public class InformationActivity extends AppCompatActivity implements View.OnCli
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.full_screen, menu);
-        return super.onCreateOptionsMenu(menu);
-    }
-
-    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.menu_zoom:
-                startActivity(DisplayImageActivity.getInstance(this, mResult.getAvatar()));
-                break;
             case android.R.id.home:
                 finish();
                 break;
@@ -129,6 +126,7 @@ public class InformationActivity extends AppCompatActivity implements View.OnCli
         mImageAva = (ImageView) findViewById(R.id.image_avatar_infor);
         mButtonLike = (FloatingActionButton) findViewById(R.id.btn_like);
         mButtonLike.setOnClickListener(this);
+        mImageAva.setOnClickListener(this);
     }
 
     public void getData() {
@@ -136,56 +134,82 @@ public class InformationActivity extends AppCompatActivity implements View.OnCli
         mResult = intent.getParcelableExtra(Const.Extra.EXTRA_NAME);
         mIsLiked = mResult.isLiked();
         mDatabase = new MarvelDataSource(getApplicationContext());
-        mRecycler = (RecyclerView) findViewById(R.id.recycler_title_infor);
-        mRecycler.setLayoutManager(new LinearLayoutManager(InformationActivity.this));
-        if (mResult.getComics() != null) if (mResult.getComics().getAvailable() != 0) getBookData
-            (String.valueOf(mResult.getId()), Const.TYPE[0]);
-        if (mResult.getSeries() != null) if (mResult.getSeries().getAvailable() != 0) getBookData
-            (String.valueOf(mResult.getId()), Const.TYPE[1]);
-        if (mResult.getEvents() != null) if (mResult.getEvents().getAvailable() != 0) getBookData
-            (String.valueOf(mResult.getId()), Const.TYPE[2]);
+        initComicsView();
+        initSeriesView();
+        initEventsView();
     }
 
-    public void getBookData(final String CollectionId, final String type) {
-        final ProgressDialog dialog = new ProgressDialog(InformationActivity.this);
-        dialog.show();
-        dialog.setMessage(getString(R.string.dialog_message));
-        dialog.setTitle(R.string.dialog_title);
-        dialog.setIndeterminate(false);
-        dialog.setCancelable(true);
+    public void initComicsView() {
+        mComics = new ArrayList<>();
+        mRecyclerComics = (RecyclerView) findViewById(R.id.recycler_infor_comics);
+        mRecyclerComics
+            .setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+        if (mResult.getComics() != null) {
+            if (mResult.getComics().getAvailable() != 0) getBookData
+                (mComics, String.valueOf(mResult.getId()), Const.TYPE[0]);
+            else findViewById(R.id.text_infor_comic).setVisibility(View.GONE);
+        }
+        mAdapterComics = new CollectionAdapter(InformationActivity.this, mComics);
+        mRecyclerComics.setAdapter(mAdapterComics);
+    }
+
+    public void initSeriesView() {
+        mSeries = new ArrayList<>();
+        mRecyclerSeries = (RecyclerView) findViewById(R.id.recycler_infor_series);
+        mRecyclerSeries
+            .setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+        if (mResult.getSeries() != null) {
+            if (mResult.getSeries().getAvailable() != 0) getBookData
+                (mSeries, String.valueOf(mResult.getId()), Const.TYPE[1]);
+            else findViewById(R.id.text_infor_series).setVisibility(View.GONE);
+        }
+        mAdapterSeries = new CollectionAdapter(InformationActivity.this, mSeries);
+        mRecyclerSeries.setAdapter(mAdapterSeries);
+    }
+
+    public void initEventsView() {
+        mEvents = new ArrayList<>();
+        mRecyclerEvents = (RecyclerView) findViewById(R.id.recycler_infor_events);
+        mRecyclerEvents
+            .setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+        if (mResult.getEvents() != null) {
+            if (mResult.getEvents().getAvailable() != 0) getBookData
+                (mEvents, String.valueOf(mResult.getId()), Const.TYPE[2]);
+            else findViewById(R.id.text_infor_events).setVisibility(View.GONE);
+        }
+        mAdapterEvents = new CollectionAdapter(InformationActivity.this, mEvents);
+        mRecyclerEvents.setAdapter(mAdapterEvents);
+    }
+
+    public void getBookData(final List<Result> list, final String CollectionId, final String type) {
         CollectionService service = ServiceGenerator.createService(CollectionService.class);
         service.getMarvel(Const.TYPE[5], CollectionId, type, Const.Key.TS, Const.Key.API_KEY, Const
-                .Key
-                .HASH,
-            String.valueOf(mLimit)).enqueue(new Callback<MarvelModel>() {
+            .Key.HASH, String.valueOf(mLimit)).enqueue(new Callback<MarvelModel>() {
             @Override
             public void onResponse(Call<MarvelModel> call, Response<MarvelModel> response) {
                 if (response != null) {
                     MarvelModel model = response.body();
-                    mBookInfor = model.getData().getResults();
-                    mBookData
-                        .add(new Data(type, mBookInfor));
-                    mAdapter = new BookAdapter(InformationActivity.this, mBookData);
-                    mRecycler.setAdapter(mAdapter);
+                    list.addAll(model.getData().getResults());
+                    mAdapterComics.notifyDataSetChanged();
+                    mAdapterSeries.notifyDataSetChanged();
+                    mAdapterEvents.notifyDataSetChanged();
                 }
-                dialog.dismiss();
             }
 
             @Override
             public void onFailure(Call<MarvelModel> call, Throwable t) {
                 Toast.makeText(InformationActivity.this, t.getMessage(), Toast.LENGTH_LONG)
                     .show();
-                dialog.dismiss();
             }
         });
     }
 
     private void displayData(Result result) {
         Glide.with(InformationActivity.this).load(result.getAvatar()).centerCrop().into(mImageAva);
-        if (result.getDescription().equals(""))
-            mTextDes.setText(getString(R.string.eleven_tab) +
-                getString(R.string.message));
-        else {
+        if (result.getDescription().equals("")) {
+            mTextDes.setVisibility(View.GONE);
+            findViewById(R.id.empty_state).setVisibility(View.VISIBLE);
+        } else {
             mTextDes.setText(getString(R.string.eleven_tab) +
                 result.getDescription());
         }
