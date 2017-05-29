@@ -22,4 +22,7 @@
     <string name="characters">Characters</string>
     <string name="images">Images</string>
     <string name="action_favorite">Favorite List</string>
+    <string name="comics">Comics</string>
+    <string name="series">Series</string>
+    <string name="events">Events</string>
 </resources>

@@ -1,6 +1,5 @@
 package com.framgia.marvel.ui.activity;
 
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,6 +10,8 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -57,6 +58,9 @@ public class ComicActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+            WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_comic);
         Intent intent = getIntent();
         mResult = intent.getParcelableExtra(Const.Extra.EXTRA_COMIC);
@@ -92,6 +96,7 @@ public class ComicActivity extends AppCompatActivity {
             setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         if (mResult.getCreators().getAvailable() != 0)
             getData(mCreatorList, String.valueOf(mResult.getId()), Const.TYPE[4]);
+        else findViewById(R.id.text_comic_creator).setVisibility(View.GONE);
         mCreatorAdapter = new CreatorAdapter(ComicActivity.this, mCreatorList);
         mCreatorRecycler.setAdapter(mCreatorAdapter);
         mCreatorRecycler.setHasFixedSize(true);
@@ -104,7 +109,8 @@ public class ComicActivity extends AppCompatActivity {
             .setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         if (mResult.getCharacters().getAvailable() != 0)
             getData(mCharacterList, String.valueOf(mResult.getId()), Const.TYPE[5]);
-        mCharacterAdapter = new CharactersAdapter(mCharacterList, ComicActivity.this, true,false);
+        else findViewById(R.id.text_comic_character).setVisibility(View.GONE);
+        mCharacterAdapter = new CharactersAdapter(mCharacterList, ComicActivity.this, true, false);
         mCharacterRecycler.setAdapter(mCharacterAdapter);
         mCharacterRecycler.setHasFixedSize(true);
     }
@@ -113,7 +119,9 @@ public class ComicActivity extends AppCompatActivity {
         mImageRecycler = (RecyclerView) findViewById(R.id.recycler_comic_image);
         mImageRecycler
             .setLayoutManager(new GridLayoutManager(this, Const.COLUMN_NUMB));
-        mImageAdapter = new ImageAdapter(ComicActivity.this, mResult.getImages());
+        if (mResult.getImages() != null)
+            mImageAdapter = new ImageAdapter(ComicActivity.this, mResult.getImages());
+        else findViewById(R.id.text_comic_image).setVisibility(View.GONE);
         mImageRecycler.setAdapter(mImageAdapter);
     }
 
@@ -129,8 +137,18 @@ public class ComicActivity extends AppCompatActivity {
         mTextIsbn.setText(result.getIsbn() == null ? getString(R.string.isbn_message)
             : (result.getIsbn().equals("") ? getString(R.string.isbn_message) : getString(R
             .string.isbn) + result.getIsbn()));
-        mTextDes.setText(result.getDescription() == null ? getString(R.string.message)
-            : getString(R.string.eleven_tab) + result.getDescription());
+        if (result.getDescription() == null) {
+            mTextDes.setVisibility(View.GONE);
+            mTextIsbn.setVisibility(View.GONE);
+            findViewById(R.id.empty_state).setVisibility(View.VISIBLE);
+        } else {
+            if (result.getDescription().equals("")) {
+                mTextDes.setVisibility(View.GONE);
+                mTextIsbn.setVisibility(View.GONE);
+                findViewById(R.id.empty_state).setVisibility(View.VISIBLE);
+            } else
+                mTextDes.setText(getString(R.string.eleven_tab) + result.getDescription());
+        }
         if (result.getStartYear() != 0) {
             mTextTime.setText(getString(R.string.start_year) + result.getStartYear() + getString
                 (R.string.end_year) +
@@ -139,12 +157,6 @@ public class ComicActivity extends AppCompatActivity {
     }
 
     public void getData(final List<Result> list, final String CollectionId, final String type) {
-        final ProgressDialog dialog = new ProgressDialog(ComicActivity.this);
-        dialog.show();
-        dialog.setMessage(getString(R.string.dialog_message));
-        dialog.setTitle(R.string.dialog_title);
-        dialog.setIndeterminate(false);
-        dialog.setCancelable(true);
         CollectionService service = ServiceGenerator.createService(CollectionService.class);
         service.getMarvel(Const.TYPE[0], CollectionId, type, Const.Key.TS, Const.Key.API_KEY, Const
             .Key.HASH, null).enqueue(new Callback<MarvelModel>() {
@@ -156,14 +168,12 @@ public class ComicActivity extends AppCompatActivity {
                     mCharacterAdapter.notifyDataSetChanged();
                     mCreatorAdapter.notifyDataSetChanged();
                 }
-                dialog.dismiss();
             }
 
             @Override
             public void onFailure(Call<MarvelModel> call, Throwable t) {
                 Toast.makeText(ComicActivity.this, t.getMessage(), Toast.LENGTH_LONG)
                     .show();
-                dialog.dismiss();
             }
         });
     }

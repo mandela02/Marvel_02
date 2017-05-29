@@ -7,7 +7,8 @@
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.framgia.marvel.ui.activity.ComicActivity"
-    tools:showIn="@layout/activity_comic">
+    tools:showIn="@layout/activity_comic"
+    android:background="@android:color/white">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -33,6 +34,14 @@
             android:textColor="@android:color/black"
             android:textSize="@dimen/dp_20"
             />
+
+        <ImageView
+            android:id="@+id/empty_state"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scaleType="fitCenter"
+            android:src="@drawable/nothing"
+            android:visibility="gone"/>
 
         <TextView
             android:id="@+id/text_comic_time"
