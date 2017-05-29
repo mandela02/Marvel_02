@@ -1,6 +1,5 @@
 package com.framgia.marvel.ui.activity;
 
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -145,10 +144,10 @@ public class InformationActivity extends AppCompatActivity implements View.OnCli
         mRecyclerComics
             .setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         if (mResult.getComics() != null) {
-            if (mResult.getComics().getAvailable() != 0) getBookData
-                (mComics, String.valueOf(mResult.getId()), Const.TYPE[0]);
+            if (mResult.getComics().getAvailable() != 0)
+                getBookData(mComics, String.valueOf(mResult.getId()), Const.TYPE[0]);
             else findViewById(R.id.text_infor_comic).setVisibility(View.GONE);
-        }
+        } else findViewById(R.id.text_infor_comic).setVisibility(View.GONE);
         mAdapterComics = new CollectionAdapter(InformationActivity.this, mComics);
         mRecyclerComics.setAdapter(mAdapterComics);
     }
@@ -159,10 +158,10 @@ public class InformationActivity extends AppCompatActivity implements View.OnCli
         mRecyclerSeries
             .setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         if (mResult.getSeries() != null) {
-            if (mResult.getSeries().getAvailable() != 0) getBookData
-                (mSeries, String.valueOf(mResult.getId()), Const.TYPE[1]);
+            if (mResult.getSeries().getAvailable() != 0)
+                getBookData(mSeries, String.valueOf(mResult.getId()), Const.TYPE[1]);
             else findViewById(R.id.text_infor_series).setVisibility(View.GONE);
-        }
+        } else findViewById(R.id.text_infor_series).setVisibility(View.GONE);
         mAdapterSeries = new CollectionAdapter(InformationActivity.this, mSeries);
         mRecyclerSeries.setAdapter(mAdapterSeries);
     }
@@ -173,10 +172,10 @@ public class InformationActivity extends AppCompatActivity implements View.OnCli
         mRecyclerEvents
             .setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         if (mResult.getEvents() != null) {
-            if (mResult.getEvents().getAvailable() != 0) getBookData
-                (mEvents, String.valueOf(mResult.getId()), Const.TYPE[2]);
+            if (mResult.getEvents().getAvailable() != 0)
+                getBookData(mEvents, String.valueOf(mResult.getId()), Const.TYPE[2]);
             else findViewById(R.id.text_infor_events).setVisibility(View.GONE);
-        }
+        } else findViewById(R.id.text_infor_events).setVisibility(View.GONE);
         mAdapterEvents = new CollectionAdapter(InformationActivity.this, mEvents);
         mRecyclerEvents.setAdapter(mAdapterEvents);
     }

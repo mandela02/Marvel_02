@@ -5,6 +5,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_margin="@dimen/dp_5"
+                                    android:backgroundTint="@color/glass"
                                     app:cardCornerRadius="@dimen/dp_5">
 
     <RelativeLayout
@@ -16,7 +17,8 @@
             android:id="@+id/image_avatar"
             android:layout_width="@dimen/dp_70"
             android:layout_height="@dimen/dp_70"
-            android:layout_margin="@dimen/dp_5"/>
+            android:layout_margin="@dimen/dp_5"
+            android:scaleType="fitCenter"/>
 
         <ImageView
             android:id="@+id/image_like"
@@ -24,8 +26,8 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_alignParentTop="true"
-            android:background="@color/cardview_light_background"
             android:padding="@dimen/dp_5"
+            android:scaleType="fitCenter"
             android:src="@drawable/ic_like_white"/>
 
         <TextView
@@ -37,6 +39,7 @@
             android:layout_toRightOf="@id/image_avatar"
             android:gravity="left|center_vertical"
             android:padding="@dimen/dp_5"
+            android:textColor="@android:color/white"
             android:textSize="@dimen/dp_25"/>
 
     </RelativeLayout>
